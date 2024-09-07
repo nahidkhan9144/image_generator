@@ -12,7 +12,6 @@ function App() {
     const prompt = {
       inputText: inputText
     }
-
     const result = await fetch("http://localhost:8000/getAIResponse", {
       method: "POST",
       headers: {
