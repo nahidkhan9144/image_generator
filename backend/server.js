@@ -1,28 +1,49 @@
 const express = require('express');
+require('dotenv').config();
 const { OpenAI } = require('openai');
 const cors = require('cors');
-require('dotenv').config();
+// require('dotenv').config({ path: '/.env' });
 
 const app = express();
 app.use(express.json()); // To parse JSON bodies
 app.use(cors());
+
+app.get('/hi',(req,res)=>{
+    return res.json("heelo");
+});
 
 app.post('/getAIResponse', async (req, res) => {
     try {
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY
         });
+        console.log(openai);
 
         const inputText = req.body.inputText;
 
+        // const completion = await openai.chat.completions.create({
+        //     model: "gpt-4-0125-preview",
+        //     messages: [
+        //         { "role": "system", "content": "You are an assistant helping users analyze their dreams. The user will provide a description of the dream, and you will help them analyze it. The response should be in paragraph format, avoiding any markdown symbols." },
+        //         { "role": "user", "content": `Write an analysis based on the description of my dream: "${inputText}"` }
+        //     ]
+        // });
+
+        // const completion = await openai.chat.completions.create({
+        //     model: "gpt-4",  // Use 'gpt-4' or 'gpt-3.5-turbo'
+        //     messages: [
+        //         { "role": "system", "content": "You are an assistant helping users analyze their dreams..." },
+        //         { "role": "user", "content": `Write an analysis based on the description of my dream: "${inputText}"` }
+        //     ]
+        // });
         const completion = await openai.chat.completions.create({
-            model: "gpt-4-0125-preview",
+            model: "gpt-3.5-turbo",
             messages: [
-                { "role": "system", "content": "You are an assistant helping users analyze their dreams. The user will provide a description of the dream, and you will help them analyze it. The response should be in paragraph format, avoiding any markdown symbols." },
-                { "role": "user", "content": `Write an analysis based on the description of my dream: "${inputText}"` }
+                { "role": "user", "content": "Hello, can you help me with a task?" }
             ]
         });
-
+        
+        
         const response = await openai.images.generate({
             model: "dall-e-3",
             prompt: `Generate a beautiful, fantastical image visualizing the dream: "${inputText}"`,
@@ -39,7 +60,11 @@ app.post('/getAIResponse', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 8000;
+// const PORT = process.env.PORT || 8000;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+// });
+const PORT = 8000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
