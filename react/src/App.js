@@ -5,8 +5,7 @@ import { useState } from 'react';
 function App() {
   const [description, setDescription] = useState("");
   const [submitStatus, setSubmitStatus] = useState("Submit");
-  const [dreamAnalysis, setDreamAnalysis] = useState("");
-  const [imageUrl, setImageUrl] = useState("")
+  const [responseAnalysis, setresponseAnalysis] = useState("");
 
   const responseGenerate = async (inputText) => {
     const prompt = {
@@ -22,39 +21,33 @@ function App() {
 
     if (result.ok) {
       const airespond = await result.json(); // Parse the JSON response body
-      setDreamAnalysis(airespond.analysis);
-      setImageUrl(airespond.imageURL);
+      setresponseAnalysis(airespond.analysis);
       setSubmitStatus("Submit");
     } else {
       setSubmitStatus("Retry");
     }
   };
 
-  
-
   async function submitDescription() {
     setSubmitStatus("Waiting");
     responseGenerate(description);
   }
   return (
+    // 
     <div className="App">
-      <header className="App-header">
-        <h2>
-          Dreamweaver
-        </h2>
-      </header>
-      <div className='App-container'>
-        <textarea 
+      <div className='container'>
+      <div className='container'>
+        <textarea rows="3"
             value={description}
             placeholder="Tell me your dream" 
             onChange={e => setDescription(e.target.value)}
             className="dream-description"
         ></textarea>
         <button onClick={submitDescription} className='submit-button'>{submitStatus}</button>
-        <span className="dream-analysis">
-          {dreamAnalysis}
+        <span className="response">
+          {responseAnalysis}
         </span>
-        {imageUrl && <img src={imageUrl} alt="Loaded"  style={{ maxWidth: '300px'}}/>}
+      </div>
       </div>
       
     </div>
