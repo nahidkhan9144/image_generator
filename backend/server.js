@@ -1,6 +1,5 @@
 const express = require('express');
 require('dotenv').config();
-const { OpenAI } = require('openai');
 const cors = require('cors');
 // require('dotenv').config({ path: '/.env' });
 
@@ -13,56 +12,40 @@ app.get('/hi',(req,res)=>{
 });
 
 app.post('/getAIResponse', async (req, res) => {
-    try {
-        const openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY
-        });
-        console.log(openai);
+    // console.log(req.body);
+    // return;
+    try{
+        const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-        const inputText = req.body.inputText;
-
-        // const completion = await openai.chat.completions.create({
-        //     model: "gpt-4-0125-preview",
-        //     messages: [
-        //         { "role": "system", "content": "You are an assistant helping users analyze their dreams. The user will provide a description of the dream, and you will help them analyze it. The response should be in paragraph format, avoiding any markdown symbols." },
-        //         { "role": "user", "content": `Write an analysis based on the description of my dream: "${inputText}"` }
-        //     ]
-        // });
-
-        // const completion = await openai.chat.completions.create({
-        //     model: "gpt-4",  // Use 'gpt-4' or 'gpt-3.5-turbo'
-        //     messages: [
-        //         { "role": "system", "content": "You are an assistant helping users analyze their dreams..." },
-        //         { "role": "user", "content": `Write an analysis based on the description of my dream: "${inputText}"` }
-        //     ]
-        // });
-        const completion = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [
-                { "role": "user", "content": "Hello, can you help me with a task?" }
-            ]
-        });
-        
-        
-        const response = await openai.images.generate({
-            model: "dall-e-3",
-            prompt: `Generate a beautiful, fantastical image visualizing the dream: "${inputText}"`,
-            size: "1024x1024",
-            quality: "standard",
-            n: 1,
-        });
-
-        res.json({ imageURL: response.data[0].url, analysis: completion.choices[0].message.content });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while processing your request.' });
-    }
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+              model: 'gpt-4',
+              messages: [
+                {
+                  role: 'system',
+                  content: 'You are a helpful assistant.'
+                },
+                {
+                  role: 'user',
+                  content: 'Hello!'
+                }
+              ]
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${OPENAI_API_KEY}`
+              }
+            }
+          );
+      
+          console.log('Response:', response.data);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      
 });
-
-// const PORT = process.env.PORT || 8000;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
 // });
 const PORT = 8000;
 app.listen(PORT, () => {
