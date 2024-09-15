@@ -34,7 +34,8 @@ function App() {
   }
   return (
     <div className="App">
-      <div className='App-container'>
+      <div className='container'>
+      <div className='container'>
         <textarea rows="3"
             value={description}
             placeholder="Tell me your dream" 
@@ -45,6 +46,7 @@ function App() {
         <span className="response">
           {responseAnalysis}
         </span>
+      </div>
       </div>
       
     </div>
