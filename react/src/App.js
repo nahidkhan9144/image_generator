@@ -14,7 +14,7 @@ function App() {
     const result = await fetch("http://localhost:8000/getAIResponse", {
       method: "POST",
       headers: {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(prompt)
     })
@@ -36,20 +36,22 @@ function App() {
     // 
     <div className="App">
       <div className='container'>
-      <div className='container'>
-        <textarea rows="3"
-            value={description}
-            placeholder="Tell me your dream" 
-            onChange={e => setDescription(e.target.value)}
-            className="dream-description"
-        ></textarea>
-        <button onClick={submitDescription} className='submit-button'>{submitStatus}</button>
+        <div className='col-md-12 my-3'>
+          <div className='col-md-6 my-3'>
+            <textarea rows="3" value={description} placeholder="Tell me your dream"
+              onChange={e => setDescription(e.target.value)}
+              className="form-control dream-description"
+            ></textarea>
+          </div>
+          <div className='col-md-6 my-3'>
+            <button onClick={submitDescription} className='btn btn-success submit-button'>{submitStatus}</button>
+          </div>
+        </div>
         <span className="response">
           {responseAnalysis}
         </span>
       </div>
-      </div>
-      
+
     </div>
   );
 }
